@@ -20,7 +20,7 @@
 
 ---
 
-#### Faker.js or equivalent
+#### Faker.js
 
 ##### Library for generating random data by region
 
