@@ -43,3 +43,9 @@
 #### CSS/Bootstrap
 
 ##### Frameworks for styling the application
+
+---
+
+### Usefull links 
+
+#### [react-infinite-scroll-component](https://www.npmjs.com/package/react-infinite-scroll-component)
