@@ -46,6 +46,8 @@
 
 ---
 
-### Usefull links 
+### Usefull links
 
 #### [react-infinite-scroll-component](https://www.npmjs.com/package/react-infinite-scroll-component)
+
+#### [@faker-js/faker](https://www.npmjs.com/package/@faker-js/faker)

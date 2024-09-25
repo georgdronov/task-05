@@ -1,4 +1,4 @@
-const faker = require("faker");
+const { faker } = require("@faker-js/faker");
 
 function generateFakeData(region, errorsCount = 0, seed = 42, page = 1) {
   faker.seed(seed);
@@ -8,14 +8,14 @@ function generateFakeData(region, errorsCount = 0, seed = 42, page = 1) {
   for (let i = 0; i < 20; i++) {
     let record = {
       id: i + 1,
-      randomId: faker.datatype.uuid(),
+      randomId: faker.string.uuid(),
       fullName: generateFullName(region),
       address: generateAddress(region),
-      phone: gemeratePhone(region),
+      phone: generatePhone(region),
     };
 
     if (errorsCount > 0) {
-      record = applayErrors(record, errorsCount);
+      record = applyErrors(record, errorsCount);
     }
 
     data.push(record);
@@ -27,42 +27,41 @@ function generateFakeData(region, errorsCount = 0, seed = 42, page = 1) {
 function generateFullName(region) {
   switch (region) {
     case "Poland":
-      return `${faker.name.firstName()} ${faker.name.lastName()}`;
+      return `${faker.person.firstName()} ${faker.person.lastName()}`;
     case "Uzbekistan":
-      return `${faker.name.firstName()} ${faker.name.lastName()}`;
+      return `${faker.person.firstName()} ${faker.person.lastName()}`;
     default:
-      return `${faker.name.firstName()} ${faker.name.lastName()}`;
+      return `${faker.person.firstName()} ${faker.person.lastName()}`;
   }
 }
 
 function generateAddress(region) {
   switch (region) {
     case "Poland":
-      return faker.address.streetAddress(true);
+      return faker.location.streetAddress(true);
     case "Uzbekistan":
-      return faker.address.streetAddress(true);
+      return faker.location.streetAddress(true);
     default:
-      return faker.address.streetAddress();
+      return faker.location.streetAddress();
   }
 }
 
-function gemeratePhone(region) {
+function generatePhone(region) {
   switch (region) {
     case "Poland":
-      return faker.phone.phoneNumber("+48 ### ### ###");
+      return faker.phone.number("+48 ### ### ###");
     case "Uzbekistan":
-      return faker.phone.phoneNumber("+998 ## ### ## ##");
+      return faker.phone.number("+998 ## ### ## ##");
     default:
-      return faker.phone.phoneNumber();
+      return faker.phone.number();
   }
 }
 
-function applayErrors(record, errorsCount) {
+function applyErrors(record, errorsCount) {
   const fields = ["fullName", "address", "phone"];
 
   for (let i = 0; i < errorsCount; i++) {
     const field = fields[Math.floor(Math.random() * fields.length)];
-
     record[field] = introduceError(record[field]);
   }
 
@@ -72,7 +71,6 @@ function applayErrors(record, errorsCount) {
 function introduceError(str) {
   const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
   const randomChar = chars[Math.floor(Math.random() * chars.length)];
   const position = Math.floor(Math.random() * str.length);
 
