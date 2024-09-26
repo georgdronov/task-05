@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 function Table({ data, fetchMoreDate }) {
@@ -9,13 +9,13 @@ function Table({ data, fetchMoreDate }) {
       hasMore={true}
       loader={<h4>Loading...</h4>}
     >
-      <table>
-        <thead>
+      <table className="table table-striped table-hover">
+        <thead className="thead-dark">
           <tr>
             <th>ID</th>
             <th>Random ID</th>
             <th>Full Name</th>
-            <th>Adress</th>
+            <th>Address</th>
             <th>Phone</th>
           </tr>
         </thead>
