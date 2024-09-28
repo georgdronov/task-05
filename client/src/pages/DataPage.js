@@ -52,7 +52,6 @@ function DataPage() {
       });
   }, [currentRegion, currentErrorCount, currentSeed]);
 
-  // Load data whenever parameters change
   useEffect(() => {
     loadData();
   }, [currentRegion, currentErrorCount, currentSeed]);
@@ -82,7 +81,10 @@ function DataPage() {
   return (
     <div
       className="container-fluid bg-light text-dark py-4"
-      style={{ boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}
+      style={{
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        overflowX: "auto",
+      }}
     >
       <h1 className="my-4 text-center">Data Generator</h1>
       <Controls
@@ -91,15 +93,14 @@ function DataPage() {
         currentErrorCount={currentErrorCount}
         currentSeed={currentSeed}
       />
-      <button onClick={generateData} className="btn btn-primary my-4">
-        Generate Data
-      </button>
       {loading ? (
         <h2 className="text-center">Loading more data...</h2>
       ) : data.length === 0 ? (
         <h2 className="text-center">Waiting for input...</h2>
       ) : (
-        <Table data={data} />
+        <div style={{ overflowX: "auto" }}>
+          <Table data={data} />
+        </div>
       )}
     </div>
   );

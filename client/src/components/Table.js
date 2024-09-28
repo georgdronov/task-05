@@ -1,5 +1,6 @@
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import "bootstrap/dist/css/bootstrap.min.css"; // Не забудьте подключить Bootstrap
 
 function Table({ data, fetchMoreDate, hasMore }) {
   return (
@@ -18,22 +19,22 @@ function Table({ data, fetchMoreDate, hasMore }) {
       <table className="table table-striped table-hover table-bordered">
         <thead className="thead-dark">
           <tr>
-            <th>ID</th>
-            <th>Random ID</th>
-            <th>Full Name</th>
-            <th>Address</th>
-            <th>Phone</th>
+            <th style={{ width: "10%" }}>ID</th>
+            <th style={{ width: "15%" }}>Random ID</th>
+            <th style={{ width: "25%" }}>Full Name</th>
+            <th style={{ width: "30%" }}>Address</th>
+            <th style={{ width: "20%" }}>Phone</th>
           </tr>
         </thead>
         <tbody>
           {data.length > 0 ? (
             data.map((item, index) => (
               <tr key={index}>
-                <td>{item.id}</td>
-                <td>{item.randomId}</td>
-                <td>{item.fullName}</td>
-                <td>{item.address}</td>
-                <td>{item.phone}</td>
+                <td style={{ wordBreak: "break-word" }}>{item.id}</td>
+                <td style={{ wordBreak: "break-word" }}>{item.randomId}</td>
+                <td style={{ wordBreak: "break-word" }}>{item.fullName}</td>
+                <td style={{ wordBreak: "break-word" }}>{item.address}</td>
+                <td style={{ wordBreak: "break-word" }}>{item.phone}</td>
               </tr>
             ))
           ) : (
