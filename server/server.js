@@ -7,7 +7,12 @@ const app = express();
 const port = 5000;
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://task-05-omega.vercel.app"],
+    credentials: true,
+  })
+);
 
 app.post("/api/generate", (req, res) => {
   const { region, errorCount, seed } = req.body;
@@ -32,10 +37,10 @@ app.get("/api/export", (req, res) => {
   }
 
   const data = generateFakeData(region, errorCount, seed);
-  
+
   const csvData = convertToCSV(data);
-  
-  const filePath = "output.csv"; 
+
+  const filePath = "output.csv";
 
   fs.writeFile(filePath, csvData, (err) => {
     if (err) {
@@ -49,8 +54,8 @@ app.get("/api/export", (req, res) => {
 });
 
 const convertToCSV = (data) => {
-  const header = Object.keys(data[0]).join(","); 
-  const rows = data.map(item => Object.values(item).join(",")); 
+  const header = Object.keys(data[0]).join(",");
+  const rows = data.map((item) => Object.values(item).join(","));
   return [header, ...rows].join("\n");
 };
 
