@@ -1,6 +1,7 @@
 const express = require("express");
 const faker = require("@faker-js/faker");
 const csv = require("csvtojson");
+const cors = require("cors");
 
 const app = express();
 const port = 5000;
@@ -8,6 +9,13 @@ const port = 5000;
 const { generateFakeData } = require("./utils/Faker");
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.post("/api/generate", (req, res) => {
   const { region, errorCount, seed, page } = req.body;

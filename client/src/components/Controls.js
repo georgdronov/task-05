@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function Controls({ onGenerate }) {
+function Controls({ onGenerate, updateParams }) {
   const [region, setRegion] = useState("USA");
   const [errorCount, setErrorCount] = useState(0);
   const [seed, setSeed] = useState(42);
 
-  // Функция для синхронизации значения ошибки с ползунком
   const handleErrorChange = (e) => {
     setErrorCount(e.target.value);
   };
 
   const handleRangeChange = (e) => {
-    setErrorCount(e.target.value * 100); // 1 шаг = 100 ошибок
+    setErrorCount(e.target.value * 100); 
   };
 
   const handleGenerate = () => {
     onGenerate({ region, errorCount, seed });
   };
 
+  useEffect(() => {
+    updateParams(region, errorCount, seed);
+  }, [region, errorCount, seed, updateParams]);
+
   return (
     <div className="mb-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-around align-items-center mb-4">
         <div className="form-group">
           <label>Region:</label>
           <select
@@ -45,7 +48,8 @@ function Controls({ onGenerate }) {
             onChange={handleErrorChange}
           />
         </div>
-        <div className="form-group d-flex flex-column  justify-content-end mb-auto">
+
+        <div className="form-group d-flex flex-column justify-content-end mb-auto">
           <label>Error Range (0-10):</label>
           <input
             type="range"
@@ -70,7 +74,7 @@ function Controls({ onGenerate }) {
       </div>
 
       <div className="d-flex justify-content-center">
-        <button className="btn btn-warning" onClick={handleGenerate}>
+        <button className="btn btn-primary" onClick={handleGenerate}>
           Generate
         </button>
       </div>

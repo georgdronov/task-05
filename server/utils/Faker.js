@@ -3,9 +3,12 @@ const { faker } = require("@faker-js/faker");
 function generateFakeData(region, errorsCount = 0, seed = 42, page = 1) {
   faker.seed(seed);
 
+  const pageSize = 20;
+  const start = (page - 1) * pageSize;
+
   const data = [];
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = start; i < pageSize; i++) {
     let record = {
       id: i + 1,
       randomId: faker.string.uuid(),
