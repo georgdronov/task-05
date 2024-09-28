@@ -1,52 +1,69 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Table from "../components/Table";
 import Controls from "../components/Controls";
 
 function DataPage() {
   const [data, setData] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const [currentRegion, setCurrentRegion] = useState("USA");
   const [currentErrorCount, setCurrentErrorCount] = useState(0);
   const [currentSeed, setCurrentSeed] = useState(42);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [allData, setAllData] = useState([]);
 
-  const fetchMoreData = () => {
-    const nextPage = Math.ceil(data.length / 20) + 1;
-    handleGenerate({
-      region: currentRegion,
-      errorCount: currentErrorCount,
-      seed: currentSeed,
-      page: nextPage,
-    });
-  };
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+      !loading
+    ) {
+      if (data.length < allData.length) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    }
+  }, [loading, data, allData]);
 
-  const handleGenerate = (params) => {
-    fetch("http://localhost:5000/api/generate", {
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  const loadData = useCallback(() => {
+    setLoading(true);
+    fetch(`http://localhost:5000/api/generate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        region: params.region,
-        errorCount: params.errorCount,
-        seed: params.seed,
-        page: params.page,
+        region: currentRegion,
+        errorCount: currentErrorCount,
+        seed: currentSeed,
       }),
     })
       .then((response) => response.json())
       .then((newData) => {
-        if (newData.length === 0) {
-          setHasMore(false);
-        } else {
-          setData((prevData) => [...prevData, ...newData]);
-        }
+        setLoading(false);
+        console.log("All data received:", newData); // Логируем все данные
+        setAllData(newData);
+        setData(newData.slice(0, 20));
       })
-      .catch((error) => console.error("Generate error: ", error));
-  };
+      .catch((error) => {
+        setLoading(false);
+        console.error("Generate error: ", error);
+      });
+  }, [currentRegion, currentErrorCount, currentSeed]);
 
-  const updateParams = (region, errorCount, seed) => {
-    setCurrentRegion(region);
-    setCurrentErrorCount(errorCount);
-    setCurrentSeed(seed);
+  useEffect(() => {
+    if (page > 0) {
+      const nextData = allData.slice(page * 20, (page + 1) * 20);
+      console.log("Loading more data:", nextData); // Логируем новые данные
+      setData((prevData) => [...prevData, ...nextData]);
+    }
+  }, [page, allData]);
+
+  const generateData = () => {
+    setPage(0);
+    loadData();
   };
 
   return (
@@ -55,8 +72,29 @@ function DataPage() {
       style={{ boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}
     >
       <h1 className="my-4 text-center">Data Generator</h1>
-      <Controls onGenerate={handleGenerate} updateParams={updateParams} />
-      <Table data={data} fetchMoreData={fetchMoreData} hasMore={hasMore} />
+      <Controls
+        updateParams={(region, errorCount, seed) => {
+          setCurrentRegion(region);
+          setCurrentErrorCount(errorCount);
+          setCurrentSeed(seed);
+          setAllData([]); 
+          setData([]); 
+          setPage(0); 
+        }}
+        currentRegion={currentRegion}
+        currentErrorCount={currentErrorCount}
+        currentSeed={currentSeed}
+      />
+      <button onClick={generateData} className="btn btn-primary my-4">
+        Generate Data
+      </button>
+      {loading ? (
+        <h2 className="text-center">Loading more data...</h2>
+      ) : data.length === 0 ? (
+        <h2 className="text-center">Waiting for input...</h2>
+      ) : (
+        <Table data={data} />
+      )}
     </div>
   );
 }

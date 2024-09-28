@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react";
 
-function Controls({ onGenerate, updateParams }) {
-  const [region, setRegion] = useState("USA");
-  const [errorCount, setErrorCount] = useState(0);
-  const [seed, setSeed] = useState(42);
+function Controls({
+  updateParams,
+  currentRegion,
+  currentErrorCount,
+  currentSeed,
+}) {
+  const [region, setRegion] = useState(currentRegion);
+  const [errorCount, setErrorCount] = useState(currentErrorCount);
+  const [seed, setSeed] = useState(currentSeed);
 
   const handleErrorChange = (e) => {
     setErrorCount(e.target.value);
   };
 
   const handleRangeChange = (e) => {
-    setErrorCount(e.target.value * 100); 
+    setErrorCount(e.target.value * 100);
   };
 
   const handleGenerate = () => {
-    onGenerate({ region, errorCount, seed });
+    updateParams(region, errorCount, seed);
   };
 
   useEffect(() => {
-    updateParams(region, errorCount, seed);
-  }, [region, errorCount, seed, updateParams]);
+    setRegion(currentRegion);
+    setErrorCount(currentErrorCount);
+    setSeed(currentSeed);
+  }, [currentRegion, currentErrorCount, currentSeed]);
 
   return (
     <div className="mb-4">
@@ -36,7 +43,6 @@ function Controls({ onGenerate, updateParams }) {
             <option value="Uzbekistan">Uzbekistan</option>
           </select>
         </div>
-
         <div className="form-group">
           <label>Errors (0-1000):</label>
           <input
@@ -48,7 +54,6 @@ function Controls({ onGenerate, updateParams }) {
             onChange={handleErrorChange}
           />
         </div>
-
         <div className="form-group d-flex flex-column justify-content-end mb-auto">
           <label>Error Range (0-10):</label>
           <input
@@ -61,7 +66,6 @@ function Controls({ onGenerate, updateParams }) {
             onChange={handleRangeChange}
           />
         </div>
-
         <div className="form-group">
           <label>Seed:</label>
           <input
@@ -72,12 +76,11 @@ function Controls({ onGenerate, updateParams }) {
           />
         </div>
       </div>
-
-      <div className="d-flex justify-content-center">
+      {/* <div className="d-flex justify-content-center">
         <button className="btn btn-primary" onClick={handleGenerate}>
           Generate
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,52 +1,32 @@
 const { faker } = require("@faker-js/faker");
 
-function generateFakeData(region, errorsCount = 0, seed = 42, page = 1) {
-  faker.seed(seed);
-
-  const pageSize = 20;
-  const start = (page - 1) * pageSize;
-
+function generateFakeData(region, errorsCount = 0, seed = 42) {
+  const totalRecords = 100;
   const data = [];
 
-  for (let i = start; i < pageSize; i++) {
-    let record = {
-      id: i + 1,
+  for (let recordIndex = 0; recordIndex < totalRecords; recordIndex++) {
+    data.push({
+      id: recordIndex + 1,
       randomId: faker.string.uuid(),
       fullName: generateFullName(region),
       address: generateAddress(region),
       phone: generatePhone(region),
-    };
+    });
+  }
 
-    if (errorsCount > 0) {
-      record = applyErrors(record, errorsCount);
-    }
-
-    data.push(record);
+  if (errorsCount > 0) {
+    data.forEach((record) => applyErrors(record, errorsCount));
   }
 
   return data;
 }
 
 function generateFullName(region) {
-  switch (region) {
-    case "Poland":
-      return `${faker.person.firstName()} ${faker.person.lastName()}`;
-    case "Uzbekistan":
-      return `${faker.person.firstName()} ${faker.person.lastName()}`;
-    default:
-      return `${faker.person.firstName()} ${faker.person.lastName()}`;
-  }
+  return `${faker.person.firstName()} ${faker.person.lastName()}`;
 }
 
 function generateAddress(region) {
-  switch (region) {
-    case "Poland":
-      return faker.location.streetAddress(true);
-    case "Uzbekistan":
-      return faker.location.streetAddress(true);
-    default:
-      return faker.location.streetAddress();
-  }
+  return faker.location.streetAddress(true);
 }
 
 function generatePhone(region) {
