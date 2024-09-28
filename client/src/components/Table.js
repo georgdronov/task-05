@@ -1,6 +1,6 @@
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import "bootstrap/dist/css/bootstrap.min.css"; // Не забудьте подключить Bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Table({ data, fetchMoreDate, hasMore }) {
   return (
