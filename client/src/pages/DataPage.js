@@ -29,7 +29,7 @@ function DataPage() {
 
   const loadData = useCallback(() => {
     setLoading(true);
-    fetch(`https://task-05.railway.internal/api/generate`, {
+    fetch(`https://task-05-production.up.railway.app/api/generate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
