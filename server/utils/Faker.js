@@ -1,6 +1,8 @@
-const { faker } = require("@faker-js/faker");
+const { fakerPL, fakerUZ_UZ_latin, fakerEN_US } = require("@faker-js/faker");
 
-function generateFakeData(region, errorsCount = 0, seed = 42) {
+function generateFakeData(region, errorsCount = 0, seed = 0) {
+  const faker = getFakerInstance(region);
+  faker.seed(seed);
   const totalRecords = 100;
   const data = [];
 
@@ -8,9 +10,9 @@ function generateFakeData(region, errorsCount = 0, seed = 42) {
     data.push({
       id: recordIndex + 1,
       randomId: faker.string.uuid(),
-      fullName: generateFullName(region),
-      address: generateAddress(region),
-      phone: generatePhone(region),
+      fullName: generateFullName(faker),
+      address: generateAddress(faker),
+      phone: generatePhone(faker, region),
     });
   }
 
@@ -21,20 +23,35 @@ function generateFakeData(region, errorsCount = 0, seed = 42) {
   return data;
 }
 
-function generateFullName(region) {
+function getFakerInstance(region) {
+  switch (region) {
+    case "Poland":
+      return fakerPL;
+    case "Uzbekistan":
+      return fakerUZ_UZ_latin;
+    case "USA":
+      return fakerEN_US;
+    default:
+      return fakerEN_US;
+  }
+}
+
+function generateFullName(faker) {
   return `${faker.person.firstName()} ${faker.person.lastName()}`;
 }
 
-function generateAddress(region) {
-  return faker.location.streetAddress(true);
+function generateAddress(faker) {
+  return faker.location.streetAddress();
 }
 
-function generatePhone(region) {
+function generatePhone(faker, region) {
   switch (region) {
     case "Poland":
-      return faker.phone.number("+48 ### ### ###");
+      return faker.phone.number({ style: 'international' }); 
     case "Uzbekistan":
-      return faker.phone.number("+998 ## ### ## ##");
+      return faker.phone.number({ style: 'international' }); 
+    case "USA":
+      return faker.phone.number({ style: 'international' }); 
     default:
       return faker.phone.number();
   }

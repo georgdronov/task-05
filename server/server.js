@@ -15,16 +15,29 @@ app.use(
 
 app.post("/api/generate", (req, res) => {
   const { region, errorCount, seed } = req.body;
-  const totalItems = 100;
 
-  const data = generateFakeData(region, errorCount, seed, totalItems);
+  if (region === undefined || errorCount === undefined || seed === undefined) {
+    return res.status(400).json({
+      error: "All parameters (region, errorCount, seed) are required.",
+    });
+  }
+
+  const data = generateFakeData(region, errorCount, seed);
   res.json(data);
 });
 
 app.get("/api/export", (req, res) => {
   const { region, errorCount, seed } = req.query;
-  const data = generateFakeData(region, errorCount, seed, 100);
+
+  if (region === undefined || errorCount === undefined || seed === undefined) {
+    return res.status(400).json({
+      error: "All parameters (region, errorCount, seed) are required.",
+    });
+  }
+
+  const data = generateFakeData(region, errorCount, seed);
   const csvData = convertToCSV(data);
+
   res.attachment("data.csv");
   res.send(csvData);
 });

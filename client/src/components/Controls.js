@@ -11,76 +11,72 @@ function Controls({
   const [seed, setSeed] = useState(currentSeed);
 
   const handleErrorChange = (e) => {
-    setErrorCount(e.target.value);
+    const newErrorCount = e.target.value;
+    setErrorCount(newErrorCount);
+    updateParams(region, newErrorCount, seed);
   };
 
   const handleRangeChange = (e) => {
-    setErrorCount(e.target.value * 100);
+    const newErrorCount = e.target.value * 100;
+    setErrorCount(newErrorCount);
+    updateParams(region, newErrorCount, seed);
   };
 
-  const handleGenerate = () => {
-    updateParams(region, errorCount, seed);
+  const handleRandomSeed = () => {
+    const randomSeed = Math.floor(Math.random() * 1000);
+    setSeed(randomSeed);
+    updateParams(region, errorCount, randomSeed);
+  };
+
+  const handleSeedChange = (e) => {
+    const newSeed = Number(e.target.value);
+    setSeed(newSeed);
+    updateParams(region, errorCount, newSeed);
   };
 
   useEffect(() => {
-    setRegion(currentRegion);
-    setErrorCount(currentErrorCount);
-    setSeed(currentSeed);
-  }, [currentRegion, currentErrorCount, currentSeed]);
+    updateParams(region, errorCount, seed);
+  }, [region, errorCount, seed]);
 
   return (
-    <div className="mb-4">
-      <div className="d-flex justify-content-around align-items-center mb-4">
-        <div className="form-group">
-          <label>Region:</label>
-          <select
-            className="form-control"
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-          >
-            <option value="USA">USA</option>
-            <option value="Poland">Poland</option>
-            <option value="Uzbekistan">Uzbekistan</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Errors (0-1000):</label>
-          <input
-            type="number"
-            className="form-control"
-            value={errorCount}
-            min={0}
-            max={1000}
-            onChange={handleErrorChange}
-          />
-        </div>
-        <div className="form-group d-flex flex-column justify-content-end mb-auto">
-          <label>Error Range (0-10):</label>
-          <input
-            type="range"
-            className="form-control-range mt-2"
-            min={0}
-            max={10}
-            step={1}
-            value={errorCount / 100}
-            onChange={handleRangeChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Seed:</label>
-          <input
-            type="number"
-            className="form-control"
-            value={seed}
-            onChange={(e) => setSeed(e.target.value)}
-          />
-        </div>
-      </div>
-      {/* <div className="d-flex justify-content-center">
-        <button className="btn btn-primary" onClick={handleGenerate}>
-          Generate
-        </button>
-      </div> */}
+    <div className="controls mb-4 text-center">
+      <select
+        value={region}
+        onChange={(e) => {
+          setRegion(e.target.value);
+          updateParams(e.target.value, errorCount, seed);
+        }}
+        className="form-select mb-2"
+      >
+        <option value="USA">USA</option>
+        <option value="Poland">Poland</option>
+        <option value="Uzbekistan">Uzbekistan</option>
+      </select>
+      <input
+        type="number"
+        value={errorCount}
+        onChange={handleErrorChange}
+        className="form-control mb-2"
+        placeholder="Error Count"
+      />
+      <input
+        type="range"
+        min="0"
+        max="10"
+        value={errorCount / 100}
+        onChange={handleRangeChange}
+        className="form-range mb-2"
+      />
+      <button onClick={handleRandomSeed} className="btn btn-warning mb-2">
+        Generate Random Seed
+      </button>
+      <input
+        type="number"
+        value={seed}
+        onChange={handleSeedChange}
+        className="form-control mb-2"
+        placeholder="Seed"
+      />
     </div>
   );
 }

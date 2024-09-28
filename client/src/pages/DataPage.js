@@ -43,7 +43,6 @@ function DataPage() {
       .then((response) => response.json())
       .then((newData) => {
         setLoading(false);
-        console.log("All data received:", newData); // Логируем все данные
         setAllData(newData);
         setData(newData.slice(0, 20));
       })
@@ -53,10 +52,14 @@ function DataPage() {
       });
   }, [currentRegion, currentErrorCount, currentSeed]);
 
+  // Load data whenever parameters change
+  useEffect(() => {
+    loadData();
+  }, [currentRegion, currentErrorCount, currentSeed]);
+
   useEffect(() => {
     if (page > 0) {
       const nextData = allData.slice(page * 20, (page + 1) * 20);
-      console.log("Loading more data:", nextData); // Логируем новые данные
       setData((prevData) => [...prevData, ...nextData]);
     }
   }, [page, allData]);
@@ -66,6 +69,16 @@ function DataPage() {
     loadData();
   };
 
+  const handleGenerateParams = (region, errorCount, seed) => {
+    setCurrentRegion(region);
+    setCurrentErrorCount(errorCount);
+    setCurrentSeed(seed);
+    setAllData([]);
+    setData([]);
+    setPage(0);
+    generateData();
+  };
+
   return (
     <div
       className="container-fluid bg-light text-dark py-4"
@@ -73,14 +86,7 @@ function DataPage() {
     >
       <h1 className="my-4 text-center">Data Generator</h1>
       <Controls
-        updateParams={(region, errorCount, seed) => {
-          setCurrentRegion(region);
-          setCurrentErrorCount(errorCount);
-          setCurrentSeed(seed);
-          setAllData([]); 
-          setData([]); 
-          setPage(0); 
-        }}
+        updateParams={handleGenerateParams}
         currentRegion={currentRegion}
         currentErrorCount={currentErrorCount}
         currentSeed={currentSeed}

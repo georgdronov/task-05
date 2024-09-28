@@ -10,10 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@faker-js/faker": "^9.0.2",
     "cors": "^2.8.5",
     "csv-writer": "^1.6.0",
     "csvtojson": "^2.0.10",
     "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.0.3"
   }
 }

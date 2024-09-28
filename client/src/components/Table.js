@@ -4,6 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 function Table({ data, fetchMoreDate, hasMore }) {
   return (
     <InfiniteScroll
+      className="table-responsive"
       dataLength={data.length}
       next={fetchMoreDate}
       hasMore={hasMore}
@@ -14,7 +15,7 @@ function Table({ data, fetchMoreDate, hasMore }) {
         </p>
       }
     >
-      <table className="table table-striped table-hover">
+      <table className="table table-striped table-hover table-bordered">
         <thead className="thead-dark">
           <tr>
             <th>ID</th>
